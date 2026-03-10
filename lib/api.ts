@@ -18,7 +18,7 @@ export async function sendChat(
   pack: Persona
 ): Promise<ChatResponse> {
   const apiBase = getApiBase();
-  const response = await fetch(`${apiBase}/chat`, {
+  const response = await fetch(`${apiBase}/api/chat`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ export async function* streamChat(
   pack: Persona
 ): AsyncGenerator<string> {
   const apiBase = getApiBase();
-  const response = await fetch(`${apiBase}/stream`, {
+  const response = await fetch(`${apiBase}/api/stream`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -113,7 +113,7 @@ export async function* streamDuelChat(
   history: { role: string; content: string }[] = []
 ): AsyncGenerator<string> {
   const apiBase = getApiBase();
-  const response = await fetch(`${apiBase}/stream`, {
+  const response = await fetch(`${apiBase}/api/stream`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

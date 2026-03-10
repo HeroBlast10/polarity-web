@@ -34,7 +34,7 @@ export default function SettingsPage() {
     try {
       // Test connection to Polarity backend (not the LLM provider URL).
       // Chat/stream requests go to backend, which then uses your Base URL + API Key.
-      const response = await fetch(`${getApiBase()}/packs`, {
+      const response = await fetch(`${getApiBase()}/api/packs`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });
