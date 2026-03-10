@@ -1,6 +1,6 @@
 import { ChatRequest, ChatResponse, Settings, ChatMessage, Persona } from './types';
 
-const DEFAULT_API_BASE = 'http://localhost:8000';
+const DEFAULT_API_BASE = 'https://polarity-web-two.vercel.app';
 
 export function getApiBase(): string {
   if (typeof window === 'undefined') return DEFAULT_API_BASE;
