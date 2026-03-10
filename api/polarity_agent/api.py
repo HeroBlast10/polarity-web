@@ -1,19 +1,13 @@
-"""Vercel Python API for Polarity Agent.
+"""FastAPI backend for Polarity Agent.
 
-This module provides a serverless FastAPI backend for the Polarity Agent,
-deployable via Vercel Serverless Functions.
+Start with::
 
-Environment Variables:
-- DEFAULT_PROVIDER: "openai", "ollama", or "litellm" (default: "openai")
-- DEFAULT_MODEL: model name (default: "gpt-4o-mini")
-- DEFAULT_BASE_URL: API base URL (optional)
-- DEFAULT_API_KEY: API key for OpenAI/etc (required for cloud providers)
+    uvicorn polarity_agent.api:app --host 0.0.0.0 --port 8000
 """
 
 from __future__ import annotations
 
 import json
-import os
 from contextlib import asynccontextmanager
 from typing import Any
 
@@ -22,27 +16,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
-# Import from local polarity_agent package
-import sys
-from pathlib import Path
-
-# Add api folder to path so we can import polarity_agent
-_api_dir = Path(__file__).resolve().parent
-if str(_api_dir) not in sys.path:
-    sys.path.insert(0, str(_api_dir))
-
 from polarity_agent.packs import PackLoader
 from polarity_agent.providers import Message, ProviderConfig, create_provider
 from polarity_agent.providers.base import BaseProvider
-
-
-# ── Default config from environment ───────────────────────────────────────
-
-DEFAULT_PROVIDER = os.environ.get("DEFAULT_PROVIDER", "openai")
-DEFAULT_MODEL = os.environ.get("DEFAULT_MODEL", "gpt-4o-mini")
-DEFAULT_BASE_URL = os.environ.get("DEFAULT_BASE_URL", None)
-DEFAULT_API_KEY = os.environ.get("DEFAULT_API_KEY", None)
-
 
 # ── Shared state ─────────────────────────────────────────────────────────
 
@@ -58,7 +34,7 @@ def _get_provider(name: str, config: ProviderConfig) -> BaseProvider:
 
 
 @asynccontextmanager
-async def _lifespan(_app: FastAPI):
+async def _lifespan(_app: FastAPI):  # type: ignore[type-arg]
     yield
     for p in _providers.values():
         await p.close()
@@ -77,10 +53,10 @@ class ChatRequest(BaseModel):
     message: str
     history: list[MessagePayload] = []
     pack: str = "advocatus"
-    provider: str = DEFAULT_PROVIDER
-    model: str = DEFAULT_MODEL
-    base_url: str | None = DEFAULT_BASE_URL
-    api_key: str | None = DEFAULT_API_KEY
+    provider: str = "ollama"
+    model: str = "llama3"
+    base_url: str | None = None
+    api_key: str | None = None
 
 
 class ChatResponseModel(BaseModel):
@@ -118,18 +94,7 @@ app.add_middleware(
 # ── Routes ───────────────────────────────────────────────────────────────
 
 
-@app.get("/api/config")
-async def get_config() -> dict:
-    """返回默认配置（不暴露敏感信息）"""
-    return {
-        "provider": DEFAULT_PROVIDER,
-        "model": DEFAULT_MODEL,
-        "base_url": DEFAULT_BASE_URL if DEFAULT_BASE_URL else "https://api.openai.com/v1",
-        "has_api_key": bool(DEFAULT_API_KEY),
-    }
-
-
-@app.get("/api/packs", response_model=list[PackInfo])
+@app.get("/packs", response_model=list[PackInfo])
 async def list_packs() -> list[PackInfo]:
     packs = _loader.discover()
     return [
@@ -144,7 +109,7 @@ async def list_packs() -> list[PackInfo]:
     ]
 
 
-@app.post("/api/chat", response_model=ChatResponseModel)
+@app.post("/chat", response_model=ChatResponseModel)
 async def chat(req: ChatRequest) -> ChatResponseModel:
     pack, provider = _resolve(req)
     messages = _build_messages(pack.system_prompt, req)
@@ -160,12 +125,12 @@ async def chat(req: ChatRequest) -> ChatResponseModel:
     )
 
 
-@app.post("/api/stream")
+@app.post("/stream")
 async def stream(req: ChatRequest) -> StreamingResponse:
     pack, provider = _resolve(req)
     messages = _build_messages(pack.system_prompt, req)
 
-    async def _generate():
+    async def _generate():  # type: ignore[return]
         try:
             async for chunk in provider.stream(messages, **pack.model_hints):
                 yield f"data: {json.dumps({'content': chunk})}\n\n"
@@ -176,7 +141,7 @@ async def stream(req: ChatRequest) -> StreamingResponse:
     return StreamingResponse(_generate(), media_type="text/event-stream")
 
 
-# ── Internals ───────────────────────────────────────────────────────────
+# ── Internals ────────────────────────────────────────────────────────────
 
 
 def _resolve(req: ChatRequest) -> tuple[Any, BaseProvider]:
@@ -202,15 +167,3 @@ def _build_messages(system_prompt: str, req: ChatRequest) -> list[Message]:
         msgs.append(Message(role=m.role, content=m.content))
     msgs.append(Message(role="user", content=req.message))
     return msgs
-
-
-# ── Vercel handler ───────────────────────────────────────────────────────
-
-# Export the FastAPI app as the handler for Vercel
-app = app
-
-
-# For local testing with uvicorn
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
