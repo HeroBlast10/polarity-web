@@ -19,11 +19,11 @@ export function MessageList({ messages }: MessageListProps) {
   }, [messages]);
 
   return (
-    <ScrollArea className="flex-1 px-4" ref={scrollRef}>
-      <div className="space-y-4 py-4">
+    <ScrollArea className="flex-1 px-4 md:px-0" ref={scrollRef}>
+      <div className="space-y-4 py-8 max-w-3xl mx-auto">
         {messages.length === 0 && (
-          <div className="flex h-32 flex-col items-center justify-center text-neutral-500">
-            <p className="text-sm">Start a conversation...</p>
+          <div className="flex flex-col items-center justify-center h-48 text-neutral-600">
+            <p className="text-sm font-mono">Start a conversation...</p>
           </div>
         )}
         {messages.map((msg) => (

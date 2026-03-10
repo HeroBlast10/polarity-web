@@ -16,11 +16,11 @@ export function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-sm">
-      <div className="container mx-auto flex h-14 items-center justify-between px-4">
-        <Link href="/" className="flex items-center gap-2 text-xl font-bold tracking-tight">
-          <span className="text-white">POLARITY</span>
-          <span className="text-neutral-500">.ai</span>
+    <header className="sticky top-0 z-50 w-full border-b border-neutral-800/50 bg-black/80 backdrop-blur-md">
+      <div className="container mx-auto flex h-16 items-center justify-between px-6">
+        <Link href="/" className="flex items-center gap-1 text-lg font-medium tracking-tight">
+          <span className="text-white" style={{ fontFamily: 'var(--font-instrument-serif)' }}>POLARITY</span>
+          <span className="text-neutral-600">.ai</span>
         </Link>
         <nav className="flex items-center gap-1">
           {navItems.slice(1).map((item) => {
@@ -31,9 +31,9 @@ export function Header() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  'flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
+                  'flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all duration-200',
                   isActive
-                    ? 'bg-neutral-800 text-white'
+                    ? 'bg-white text-black'
                     : 'text-neutral-400 hover:bg-neutral-900 hover:text-white'
                 )}
               >

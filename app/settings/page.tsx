@@ -51,26 +51,29 @@ export default function SettingsPage() {
   const models = PROVIDER_MODELS[localSettings.provider] || [];
 
   return (
-    <div className="container mx-auto max-w-2xl px-4 py-8">
+    <div className="container mx-auto max-w-xl px-4 py-12">
       <Button
         variant="ghost"
         onClick={() => router.back()}
-        className="mb-6 text-neutral-400 hover:text-white"
+        className="mb-8 text-neutral-500 hover:text-white rounded-full px-4"
       >
         <ArrowLeft className="mr-2 h-4 w-4" />
         Back
       </Button>
 
+      <div className="mb-10">
+        <h1 className="text-3xl font-normal text-white mb-2" style={{ fontFamily: 'var(--font-instrument-serif)' }}>
+          Settings
+        </h1>
+        <p className="text-neutral-500">
+          Configure your API provider and model
+        </p>
+      </div>
+
       <Card className="border-neutral-800 bg-card">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold text-white">Settings</CardTitle>
-          <CardDescription className="text-neutral-400">
-            Configure your API provider and model
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="space-y-2">
-            <Label htmlFor="provider" className="text-neutral-300">Provider</Label>
+        <CardContent className="pt-6 space-y-6">
+          <div className="space-y-3">
+            <Label htmlFor="provider" className="text-neutral-400 text-sm font-medium">Provider</Label>
             <Select
               value={localSettings.provider}
               onValueChange={(value: 'openai' | 'ollama' | 'litellm') => {
@@ -82,10 +85,10 @@ export default function SettingsPage() {
                 });
               }}
             >
-              <SelectTrigger className="border-neutral-700 bg-neutral-900 text-white">
+              <SelectTrigger className="border-neutral-800 bg-neutral-900/50 text-white rounded-lg h-11">
                 <SelectValue placeholder="Select provider" />
               </SelectTrigger>
-              <SelectContent className="border-neutral-700 bg-neutral-900 text-white">
+              <SelectContent className="border-neutral-800 bg-neutral-900 text-white">
                 <SelectItem value="openai">OpenAI</SelectItem>
                 <SelectItem value="ollama">Ollama (Local)</SelectItem>
                 <SelectItem value="litellm">LiteLLM</SelectItem>
@@ -93,16 +96,16 @@ export default function SettingsPage() {
             </Select>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="model" className="text-neutral-300">Model</Label>
+          <div className="space-y-3">
+            <Label htmlFor="model" className="text-neutral-400 text-sm font-medium">Model</Label>
             <Select
               value={localSettings.model}
               onValueChange={(value) => setLocalSettings({ ...localSettings, model: value })}
             >
-              <SelectTrigger className="border-neutral-700 bg-neutral-900 text-white">
+              <SelectTrigger className="border-neutral-800 bg-neutral-900/50 text-white rounded-lg h-11">
                 <SelectValue placeholder="Select model" />
               </SelectTrigger>
-              <SelectContent className="border-neutral-700 bg-neutral-900 text-white">
+              <SelectContent className="border-neutral-800 bg-neutral-900 text-white">
                 {models.map((model) => (
                   <SelectItem key={model} value={model}>
                     {model}
@@ -112,9 +115,9 @@ export default function SettingsPage() {
             </Select>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="apiKey" className="text-neutral-300">
-              API Key {localSettings.provider === 'ollama' && '(Optional for local)'}
+          <div className="space-y-3">
+            <Label htmlFor="apiKey" className="text-neutral-400 text-sm font-medium">
+              API Key {localSettings.provider === 'ollama' && <span className="text-neutral-600 font-normal">(Optional for local)</span>}
             </Label>
             <Input
               id="apiKey"
@@ -122,13 +125,13 @@ export default function SettingsPage() {
               placeholder={localSettings.provider === 'ollama' ? 'sk-... (optional)' : 'sk-...'}
               value={localSettings.apiKey}
               onChange={(e) => setLocalSettings({ ...localSettings, apiKey: e.target.value })}
-              className="border-neutral-700 bg-neutral-900 text-white placeholder:text-neutral-500"
+              className="border-neutral-800 bg-neutral-900/50 text-white placeholder:text-neutral-600 rounded-lg h-11 font-mono"
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="baseUrl" className="text-neutral-300">
-              Base URL {localSettings.provider === 'ollama' && '(Default: http://localhost:11434)'}
+          <div className="space-y-3">
+            <Label htmlFor="baseUrl" className="text-neutral-400 text-sm font-medium">
+              Base URL {localSettings.provider === 'ollama' && <span className="text-neutral-600 font-normal">(Default: localhost:11434)</span>}
             </Label>
             <Input
               id="baseUrl"
@@ -140,14 +143,14 @@ export default function SettingsPage() {
               }
               value={localSettings.baseUrl}
               onChange={(e) => setLocalSettings({ ...localSettings, baseUrl: e.target.value })}
-              className="border-neutral-700 bg-neutral-900 text-white placeholder:text-neutral-500"
+              className="border-neutral-800 bg-neutral-900/50 text-white placeholder:text-neutral-600 rounded-lg h-11 font-mono"
             />
           </div>
 
           <div className="flex gap-3 pt-4">
             <Button
               onClick={handleSave}
-              className="bg-white text-black hover:bg-neutral-200"
+              className="bg-white text-black hover:bg-neutral-200 rounded-full px-6"
             >
               {saved ? (
                 <>
@@ -162,7 +165,7 @@ export default function SettingsPage() {
               variant="outline"
               onClick={handleTest}
               disabled={testStatus === 'testing'}
-              className="border-neutral-700 text-neutral-300 hover:bg-neutral-800 hover:text-white"
+              className="border-neutral-800 text-neutral-400 hover:bg-neutral-900 hover:text-white rounded-full px-6"
             >
               {testStatus === 'testing' && 'Testing...'}
               {testStatus === 'success' && (
@@ -181,11 +184,11 @@ export default function SettingsPage() {
             </Button>
           </div>
 
-          <div className="rounded-lg bg-neutral-900 p-4 text-sm text-neutral-400">
-            <p className="font-medium text-neutral-300">Note:</p>
-            <ul className="mt-2 list-inside list-disc space-y-1">
-              <li>For OpenAI: Use your API key from platform.openai.com</li>
-              <li>For Ollama: Run locally with <code className="text-neutral-300">ollama serve</code></li>
+          <div className="rounded-lg bg-neutral-900/50 p-5 text-sm text-neutral-500 space-y-2">
+            <p className="font-medium text-neutral-400">Note:</p>
+            <ul className="list-disc list-inside space-y-1">
+              <li>For OpenAI: Use your API key from <span className="text-neutral-300">platform.openai.com</span></li>
+              <li>For Ollama: Run locally with <code className="text-neutral-300 font-mono">ollama serve</code></li>
               <li>For LiteLLM: Use any LLM that supports OpenAI-compatible API</li>
             </ul>
           </div>

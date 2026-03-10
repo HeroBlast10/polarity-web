@@ -9,13 +9,12 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useSettings, useChat } from '@/lib/store';
 import { streamChat } from '@/lib/api';
 import { Persona, ChatMessage } from '@/lib/types';
-import { Trash2, Loader2, ArrowLeft, Settings } from 'lucide-react';
+import { Trash2, Loader2, ArrowLeft } from 'lucide-react';
 
 export default function ChatPage() {
   const router = useRouter();
   const { settings } = useSettings();
   const { messages, currentPersona, isLoading, setPersona, addMessage, updateLastMessage, clearMessages, setLoading } = useChat();
-  const [streamContent, setStreamContent] = useState('');
 
   const handleSend = useCallback(async (message: string) => {
     const userMsg: ChatMessage = {
@@ -40,7 +39,6 @@ export default function ChatPage() {
       let content = '';
       for await (const chunk of streamChat(settings, message, messages, currentPersona)) {
         content += chunk;
-        setStreamContent(content);
         updateLastMessage(content);
       }
     } catch (error) {
@@ -48,7 +46,6 @@ export default function ChatPage() {
       updateLastMessage(`Error: ${errorMsg}`);
     } finally {
       setLoading(false);
-      setStreamContent('');
     }
   }, [settings, messages, currentPersona, addMessage, updateLastMessage, setLoading]);
 
@@ -58,24 +55,36 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex h-[calc(100vh-57px)] flex-col">
-      <div className="flex items-center justify-between border-b border-neutral-800 bg-card px-4 py-3">
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" onClick={() => router.push('/')} className="text-neutral-400 hover:text-white">
+    <div className="flex h-[calc(100vh-64px)] flex-col">
+      <div className="flex items-center justify-between border-b border-neutral-800/50 bg-card/50 px-6 py-4">
+        <div className="flex items-center gap-4">
+          <Button variant="ghost" size="icon" onClick={() => router.push('/')} className="text-neutral-400 hover:text-white rounded-full">
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <Tabs value={currentPersona} onValueChange={handlePersonaChange}>
-            <TabsList className="bg-neutral-900">
-              <TabsTrigger value="advocatus" className="data-[state=active]:bg-advocatus data-[state=active]:text-black">
+            <TabsList className="bg-neutral-900/50 h-10">
+              <TabsTrigger 
+                value="advocatus" 
+                className="data-[state=active]:bg-green-500 data-[state=active]:text-black data-[state=active]:shadow-none px-6 rounded-full"
+              >
                 Advocatus
               </TabsTrigger>
-              <TabsTrigger value="inquisitor" className="data-[state=active]:bg-inquisitor data-[state=active]:text-white">
+              <TabsTrigger 
+                value="inquisitor" 
+                className="data-[state=active]:bg-red-500 data-[state=active]:text-white data-[state=active]:shadow-none px-6 rounded-full"
+              >
                 Inquisitor
               </TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
-        <Button variant="ghost" size="sm" onClick={clearMessages} disabled={messages.length === 0} className="text-neutral-400 hover:text-white">
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          onClick={clearMessages} 
+          disabled={messages.length === 0} 
+          className="text-neutral-500 hover:text-white rounded-full px-4"
+        >
           <Trash2 className="mr-2 h-4 w-4" />
           Clear
         </Button>
@@ -83,12 +92,14 @@ export default function ChatPage() {
 
       <MessageList messages={messages} />
 
-      <div className="border-t border-neutral-800 bg-card p-4">
-        <div className="mx-auto max-w-4xl">
+      <div className="border-t border-neutral-800/50 bg-card/50 backdrop-blur-sm p-4 md:p-6">
+        <div className="mx-auto max-w-3xl">
           {isLoading && (
-            <div className="mb-2 flex items-center gap-2 text-sm text-neutral-500">
+            <div className="mb-3 flex items-center gap-2 text-sm text-neutral-500">
               <Loader2 className="h-4 w-4 animate-spin" />
-              <span>{currentPersona === 'advocatus' ? 'Advocatus is thinking...' : 'Inquisitor is judging...'}</span>
+              <span className="font-mono text-xs">
+                {currentPersona === 'advocatus' ? 'Advocatus is thinking...' : 'Inquisitor is judging...'}
+              </span>
             </div>
           )}
           <ChatInput
