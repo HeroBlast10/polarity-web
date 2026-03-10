@@ -19,7 +19,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-neutral-800/50 bg-black/80 backdrop-blur-md">
       <div className="container mx-auto flex h-16 items-center justify-between px-6">
-        <Link href="/" className="flex items-center gap-3 text-lg font-medium tracking-tight">
+        <Link href="/" className="flex items-center gap-3 text-lg font-medium tracking-[0.15em]">
           <Image
             src="/logo.png"
             alt="Polarity"
@@ -28,7 +28,7 @@ export function Header() {
             className="h-9 w-9 shrink-0 object-contain"
             priority
           />
-          <span className="text-white" style={{ fontFamily: 'var(--font-instrument-serif)' }}>POLARITY</span>
+          <span className="text-white tracking-[0.15em]" style={{ fontFamily: 'var(--font-instrument-serif)' }}>POLARITY</span>
           <span className="text-neutral-600">.ai</span>
         </Link>
         <nav className="flex items-center gap-1">

@@ -39,7 +39,7 @@ export default function Home() {
               <div className="mb-6 rounded-full bg-green-500/5 p-5 group-hover:bg-green-500/10 transition-colors">
                 <MessageSquare className="h-7 w-7 text-green-500" />
               </div>
-              <h2 className="text-2xl font-medium text-white mb-3" style={{ fontFamily: 'var(--font-instrument-serif)' }}>
+              <h2 className="text-2xl font-medium text-white mb-3" style={{ fontFamily: 'var(--font-dm-sans)' }}>
                 Single Chat
               </h2>
               <p className="text-neutral-400 mb-6 leading-relaxed">
@@ -58,7 +58,7 @@ export default function Home() {
               <div className="mb-6 rounded-full bg-red-500/5 p-5 group-hover:bg-red-500/10 transition-colors">
                 <Swords className="h-7 w-7 text-red-500" />
               </div>
-              <h2 className="text-2xl font-medium text-white mb-3" style={{ fontFamily: 'var(--font-instrument-serif)' }}>
+              <h2 className="text-2xl font-medium text-white mb-3" style={{ fontFamily: 'var(--font-dm-sans)' }}>
                 Duel Mode
               </h2>
               <p className="text-neutral-400 mb-6 leading-relaxed">
