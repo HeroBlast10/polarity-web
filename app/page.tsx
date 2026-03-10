@@ -72,7 +72,7 @@ export default function Home() {
         </Link>
       </div>
 
-      <div className="flex items-center gap-6 text-sm text-neutral-500">
+      <div className="flex items-center gap-6 text-sm text-neutral-500 mt-5">
         <Link href="/settings" className="flex items-center gap-2 hover:text-white transition-colors">
           <Settings className="h-4 w-4" />
           Configure API
