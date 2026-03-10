@@ -133,7 +133,7 @@ export default function DuelPage() {
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <ModeIcon className={`h-5 w-5 text-cyan-500`} />
-        <span className="font-medium text-white">{modeInfo[duelState.mode as keyof typeof modeInfo].title}</span>
+        <span className="font-medium text-white">{modeInfo[duelState.mode].title}</span>
         {started && <span className="text-sm text-neutral-500">Round {duelState.round}/{duelState.rounds}</span>}
       </div>
 
@@ -154,7 +154,7 @@ export default function DuelPage() {
                       <SelectItem value="praise-battle">Praise Battle</SelectItem>
                     </SelectContent>
                   </Select>
-                  <p className="text-sm text-neutral-500">{modeInfo[duelState.mode as keyof typeof modeInfo].description}</p>
+                  <p className="text-sm text-neutral-500">{modeInfo[duelState.mode].description}</p>
                 </div>
 
                 <div className="space-y-2">

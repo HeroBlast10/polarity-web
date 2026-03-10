@@ -1,0 +1,12 @@
+# Vercel Python Runtime
+fastapi>=0.115.0
+uvicorn[standard]>=0.34.0
+pydantic>=2.0.0
+
+# LLM Providers
+openai>=1.0.0
+httpx>=0.27.0
+litellm>=1.0.0
+
+# Install polarity-agent from GitHub
+git+https://github.com/HeroBlast10/polarity-agent.git@main#subdirectory=src
