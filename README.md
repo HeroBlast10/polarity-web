@@ -1,5 +1,9 @@
 # Polarity.ai Web
 
+<p align="center">
+  <img src="public/logo.png" alt="Polarity Logo" width="160" />
+</p>
+
 The AI that refuses to be neutral. It either defends your worst ideas or attacks your objective truths.
 
 A Next.js web application featuring:
