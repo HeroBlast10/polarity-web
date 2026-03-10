@@ -3,6 +3,7 @@ import { DM_Sans, Instrument_Serif, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { AppProvider } from "@/lib/store";
 import { Header } from "@/components/layout/header";
+import { DarkModeScript } from "@/components/dark-mode-script";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -36,7 +37,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <DarkModeScript />
+      </head>
       <body
         className={`${dmSans.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable} antialiased min-h-screen bg-background font-sans`}
       >

@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Settings, MessageSquare, Swords } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -18,7 +19,15 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-neutral-800/50 bg-black/80 backdrop-blur-md">
       <div className="container mx-auto flex h-16 items-center justify-between px-6">
-        <Link href="/" className="flex items-center gap-1 text-lg font-medium tracking-tight">
+        <Link href="/" className="flex items-center gap-3 text-lg font-medium tracking-tight">
+          <Image
+            src="/logo.png"
+            alt="Polarity"
+            width={36}
+            height={36}
+            className="h-9 w-9 shrink-0 object-contain"
+            priority
+          />
           <span className="text-white" style={{ fontFamily: 'var(--font-instrument-serif)' }}>POLARITY</span>
           <span className="text-neutral-600">.ai</span>
         </Link>

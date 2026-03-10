@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useSettings } from '@/lib/store';
+import { getApiBase } from '@/lib/api';
 import { PROVIDER_MODELS } from '@/lib/types';
 import { ArrowLeft, Check, AlertCircle } from 'lucide-react';
 
@@ -31,11 +32,11 @@ export default function SettingsPage() {
   const handleTest = async () => {
     setTestStatus('testing');
     try {
-      const response = await fetch(`${localSettings.baseUrl || 'http://localhost:8000'}/packs`, {
+      // Test connection to Polarity backend (not the LLM provider URL).
+      // Chat/stream requests go to backend, which then uses your Base URL + API Key.
+      const response = await fetch(`${getApiBase()}/packs`, {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
       });
       if (response.ok) {
         setTestStatus('success');
@@ -48,7 +49,7 @@ export default function SettingsPage() {
     setTimeout(() => setTestStatus('idle'), 3000);
   };
 
-  const models = PROVIDER_MODELS[localSettings.provider] || [];
+  const modelPlaceholder = (PROVIDER_MODELS[localSettings.provider] || [])[0] || 'e.g. gpt-4o, llama3';
 
   return (
     <div className="container mx-auto max-w-xl px-4 py-12">
@@ -77,11 +78,11 @@ export default function SettingsPage() {
             <Select
               value={localSettings.provider}
               onValueChange={(value: 'openai' | 'ollama' | 'litellm') => {
-                const newModels = PROVIDER_MODELS[value] || [];
+                const defaultModel = (PROVIDER_MODELS[value] || [])[0] || '';
                 setLocalSettings({
                   ...localSettings,
                   provider: value,
-                  model: newModels[0] || '',
+                  model: defaultModel,
                 });
               }}
             >
@@ -98,21 +99,14 @@ export default function SettingsPage() {
 
           <div className="space-y-3">
             <Label htmlFor="model" className="text-neutral-400 text-sm font-medium">Model</Label>
-            <Select
+            <Input
+              id="model"
+              type="text"
+              placeholder={modelPlaceholder}
               value={localSettings.model}
-              onValueChange={(value) => setLocalSettings({ ...localSettings, model: value })}
-            >
-              <SelectTrigger className="border-neutral-800 bg-neutral-900/50 text-white rounded-lg h-11">
-                <SelectValue placeholder="Select model" />
-              </SelectTrigger>
-              <SelectContent className="border-neutral-800 bg-neutral-900 text-white">
-                {models.map((model) => (
-                  <SelectItem key={model} value={model}>
-                    {model}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              onChange={(e) => setLocalSettings({ ...localSettings, model: e.target.value })}
+              className="border-neutral-800 bg-neutral-900/50 text-white placeholder:text-neutral-600 rounded-lg h-11"
+            />
           </div>
 
           <div className="space-y-3">
@@ -143,6 +137,22 @@ export default function SettingsPage() {
               }
               value={localSettings.baseUrl}
               onChange={(e) => setLocalSettings({ ...localSettings, baseUrl: e.target.value })}
+              className="border-neutral-800 bg-neutral-900/50 text-white placeholder:text-neutral-600 rounded-lg h-11 font-mono"
+            />
+          </div>
+
+          <div className="space-y-3 pt-2">
+            <Label htmlFor="backendUrl" className="text-neutral-400 text-sm font-medium">
+              Backend URL <span className="text-neutral-600 font-normal">(Your Polarity server)</span>
+            </Label>
+            <Input
+              id="backendUrl"
+              type="text"
+              placeholder="http://localhost:8000"
+              defaultValue={typeof window !== 'undefined' ? localStorage.getItem('polarity_api_base') || 'http://localhost:8000' : 'http://localhost:8000'}
+              onBlur={(e) => {
+                localStorage.setItem('polarity_api_base', e.target.value);
+              }}
               className="border-neutral-800 bg-neutral-900/50 text-white placeholder:text-neutral-600 rounded-lg h-11 font-mono"
             />
           </div>
@@ -187,9 +197,10 @@ export default function SettingsPage() {
           <div className="rounded-lg bg-neutral-900/50 p-5 text-sm text-neutral-500 space-y-2">
             <p className="font-medium text-neutral-400">Note:</p>
             <ul className="list-disc list-inside space-y-1">
-              <li>For OpenAI: Use your API key from <span className="text-neutral-300">platform.openai.com</span></li>
-              <li>For Ollama: Run locally with <code className="text-neutral-300 font-mono">ollama serve</code></li>
-              <li>For LiteLLM: Use any LLM that supports OpenAI-compatible API</li>
+              <li><span className="text-neutral-300">OpenAI</span> (provider): Any OpenAI-compatible API — e.g. OpenAI, DeepSeek, Kimi, etc. Fill in that service&apos;s Base URL and API Key.</li>
+              <li><span className="text-neutral-300">Ollama</span>: Run locally with <code className="text-neutral-300 font-mono">ollama serve</code>, Base URL usually <code className="text-neutral-300 font-mono">http://localhost:11434</code></li>
+              <li><span className="text-neutral-300">LiteLLM</span>: Use any LLM that supports OpenAI-compatible API</li>
+              <li>Test Connection checks if the <span className="text-neutral-300">Polarity backend</span> is reachable (default <code className="text-neutral-300 font-mono">http://localhost:8000</code>). Start it with <code className="text-neutral-300 font-mono">polarity serve</code> or <code className="text-neutral-300 font-mono">uvicorn polarity_agent.api:app --port 8000</code>.</li>
             </ul>
           </div>
         </CardContent>
