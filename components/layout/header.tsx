@@ -3,11 +3,15 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Settings, MessageSquare, Swords } from 'lucide-react';
+import { Settings, MessageSquare, Swords, Printer } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function Header() {
   const pathname = usePathname();
+
+  const handlePrint = () => {
+    window.print();
+  };
 
   const navItems = [
     { href: '/', label: 'Home', icon: null },
@@ -32,6 +36,14 @@ export function Header() {
           <span className="text-neutral-600">.ai</span>
         </Link>
         <nav className="flex items-center gap-1">
+          <button
+            onClick={handlePrint}
+            className="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-neutral-400 transition-all duration-200 hover:bg-neutral-900 hover:text-white"
+            title="Print / Save as PDF"
+          >
+            <Printer className="h-4 w-4" />
+            Print
+          </button>
           {navItems.slice(1).map((item) => {
             const isActive = pathname === item.href;
             const Icon = item.icon;

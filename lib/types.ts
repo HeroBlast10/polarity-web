@@ -26,6 +26,18 @@ export interface DuelRound {
   inquisitor: string;
 }
 
+export interface DuelState {
+  round: number;
+  topic: string;
+  mode: DuelMode;
+  rounds: number;
+  advocatusText: string;
+  inquisitorText: string;
+  isThinking: 'advocatus' | 'inquisitor' | null;
+  history: { role: string; content: string }[];
+  started: boolean;
+}
+
 export interface Settings {
   apiKey: string;
   provider: 'openai' | 'ollama' | 'litellm';
