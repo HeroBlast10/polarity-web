@@ -16,6 +16,22 @@
     {
       "src": "/api/(.*)",
       "dest": "/api/index.py"
+    },
+    {
+      "src": "/api/config",
+      "dest": "/api/index.py"
+    },
+    {
+      "src": "/api/packs",
+      "dest": "/api/index.py"
+    },
+    {
+      "src": "/api/chat",
+      "dest": "/api/index.py"
+    },
+    {
+      "src": "/api/stream",
+      "dest": "/api/index.py"
     }
   ]
 }
