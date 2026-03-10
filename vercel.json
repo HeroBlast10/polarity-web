@@ -6,6 +6,10 @@
       "config": {
         "runtime": "python3.11"
       }
+    },
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
     }
   ],
   "routes": [
