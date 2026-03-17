@@ -29,13 +29,12 @@ export function Header() {
           <Image
             src="/logo.png"
             alt="Polarity"
-            width={36}
-            height={36}
-            className="h-9 w-9 shrink-0 object-contain"
+            width={44}
+            height={44}
+            className="h-11 w-11 shrink-0 object-contain"
             priority
           />
           <span className="text-white tracking-[0.15em]" style={{ fontFamily: 'var(--font-instrument-serif)' }}>POLARITY</span>
-          <span className="text-neutral-600">.ai</span>
         </Link>
         <nav className="flex items-center gap-1">
           <Link
@@ -48,14 +47,6 @@ export function Header() {
             <Github className="h-4 w-4" />
             GitHub
           </Link>
-          <button
-            onClick={handlePrint}
-            className="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-neutral-400 transition-all duration-200 hover:bg-neutral-900 hover:text-white"
-            title="Print / Save as PDF"
-          >
-            <Printer className="h-4 w-4" />
-            Print
-          </button>
           {navItems.slice(1).map((item) => {
             const isActive = pathname === item.href;
             const Icon = item.icon;
@@ -75,6 +66,14 @@ export function Header() {
               </Link>
             );
           })}
+          <button
+            onClick={handlePrint}
+            className="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-neutral-400 transition-all duration-200 hover:bg-neutral-900 hover:text-white"
+            title="Print / Save as PDF"
+          >
+            <Printer className="h-4 w-4" />
+            Print
+          </button>
         </nav>
       </div>
     </header>
