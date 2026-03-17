@@ -3,8 +3,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Settings, MessageSquare, Swords, Printer } from 'lucide-react';
+import { Settings, MessageSquare, Swords, Printer, Github } from 'lucide-react';
 import { cn } from '@/lib/utils';
+
+const GITHUB_URL = 'https://github.com/HeroBlast10/polarity-agent';
 
 export function Header() {
   const pathname = usePathname();
@@ -36,6 +38,16 @@ export function Header() {
           <span className="text-neutral-600">.ai</span>
         </Link>
         <nav className="flex items-center gap-1">
+          <Link
+            href={GITHUB_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-neutral-400 transition-all duration-200 hover:bg-neutral-900 hover:text-white"
+            title="Open project on GitHub"
+          >
+            <Github className="h-4 w-4" />
+            GitHub
+          </Link>
           <button
             onClick={handlePrint}
             className="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-neutral-400 transition-all duration-200 hover:bg-neutral-900 hover:text-white"
