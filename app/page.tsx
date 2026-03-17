@@ -31,7 +31,7 @@ export default function Home() {
             alt="Polarity"
             width={208}
             height={208}
-            className="mx-auto mb-3 h-44 w-44 object-contain md:h-52 md:w-52"
+            className="mx-auto -mb-2 h-44 w-44 object-contain md:h-52 md:w-52"
             priority
           />
           <p className="mb-3 text-sm font-medium uppercase tracking-[0.2em] text-neutral-500">
@@ -70,40 +70,34 @@ export default function Home() {
         </div>
 
         {/* 功能卡片 */}
-        <div className="grid w-full max-w-4xl grid-cols-1 gap-4 md:grid-cols-2 md:gap-5">
-          <Link href="/settings?redirect=chat" className="group">
-            <Card size="sm" className="h-full cursor-pointer border border-neutral-800 bg-card transition-all duration-500 hover:border-green-500/30 hover:bg-neutral-900/50">
-              <CardContent className="flex flex-col items-center justify-center p-6 text-center md:p-7">
-                <div className="mb-3 rounded-full bg-green-500/5 p-3.5 transition-colors group-hover:bg-green-500/10">
+        <div className="flex w-full max-w-xl flex-col gap-3 md:flex-row md:gap-4">
+          <Link href="/settings?redirect=chat" className="group flex-1">
+            <Card size="sm" className="cursor-pointer border border-neutral-800 bg-card transition-all duration-500 hover:border-green-500/30 hover:bg-neutral-900/50">
+              <CardContent className="flex flex-col items-center justify-center px-5 py-5 text-center">
+                <div className="mb-2 rounded-full bg-green-500/5 p-3 transition-colors group-hover:bg-green-500/10">
                   <MessageSquare className="h-5 w-5 text-green-500" />
                 </div>
-                <h2 className="mb-2 text-lg font-medium text-white md:text-xl" style={{ fontFamily: 'var(--font-dm-sans)' }}>
+                <h2 className="mb-3 text-base font-medium text-white" style={{ fontFamily: 'var(--font-dm-sans)' }}>
                   Single Chat
                 </h2>
-                <p className="mb-4 text-sm leading-7 text-neutral-400">
-                  Configure your API first, then jump into a one-on-one debate with Advocatus or Inquisitor.
-                </p>
-                <Button variant="outline" size="sm" className="rounded-full px-6 transition-all group-hover:border-green-500/30 group-hover:bg-green-500/10 group-hover:text-green-400">
-                  Configure <ArrowRight className="ml-2 h-4 w-4" />
+                <Button variant="outline" size="sm" className="rounded-full px-5 text-xs transition-all group-hover:border-green-500/30 group-hover:bg-green-500/10 group-hover:text-green-400">
+                  Configure API Key <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
                 </Button>
               </CardContent>
             </Card>
           </Link>
 
-          <Link href="/settings?redirect=chat" className="group">
-            <Card size="sm" className="h-full cursor-pointer border border-neutral-800 bg-card transition-all duration-500 hover:border-red-500/30 hover:bg-neutral-900/50">
-              <CardContent className="flex flex-col items-center justify-center p-6 text-center md:p-7">
-                <div className="mb-3 rounded-full bg-red-500/5 p-3.5 transition-colors group-hover:bg-red-500/10">
+          <Link href="/settings?redirect=chat" className="group flex-1">
+            <Card size="sm" className="cursor-pointer border border-neutral-800 bg-card transition-all duration-500 hover:border-red-500/30 hover:bg-neutral-900/50">
+              <CardContent className="flex flex-col items-center justify-center px-5 py-5 text-center">
+                <div className="mb-2 rounded-full bg-red-500/5 p-3 transition-colors group-hover:bg-red-500/10">
                   <Swords className="h-5 w-5 text-red-500" />
                 </div>
-                <h2 className="mb-2 text-lg font-medium text-white md:text-xl" style={{ fontFamily: 'var(--font-dm-sans)' }}>
+                <h2 className="mb-3 text-base font-medium text-white" style={{ fontFamily: 'var(--font-dm-sans)' }}>
                   Duel Mode
                 </h2>
-                <p className="mb-4 text-sm leading-7 text-neutral-400">
-                  Set up your API on the next screen, then continue into chat before heading to the arena.
-                </p>
-                <Button variant="outline" size="sm" className="rounded-full px-6 transition-all group-hover:border-red-500/30 group-hover:bg-red-500/10 group-hover:text-red-400">
-                  Configure <ArrowRight className="ml-2 h-4 w-4" />
+                <Button variant="outline" size="sm" className="rounded-full px-5 text-xs transition-all group-hover:border-red-500/30 group-hover:bg-red-500/10 group-hover:text-red-400">
+                  Configure API Key <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
                 </Button>
               </CardContent>
             </Card>
