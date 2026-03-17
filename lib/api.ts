@@ -11,11 +11,43 @@ export function setApiBase(base: string): void {
   localStorage.setItem('polarity_api_base', base);
 }
 
+interface RequestOptions {
+  useBackendDefaults?: boolean;
+  onReady?: () => void;
+}
+
+function buildChatRequest(
+  settings: Settings,
+  message: string,
+  history: { role: string; content: string }[],
+  pack: Persona,
+  options?: RequestOptions
+): ChatRequest {
+  const request: ChatRequest = {
+    message,
+    history,
+    pack,
+  };
+
+  if (options?.useBackendDefaults) {
+    return request;
+  }
+
+  return {
+    ...request,
+    provider: settings.provider,
+    model: settings.model,
+    base_url: settings.baseUrl || null,
+    api_key: settings.apiKey || null,
+  };
+}
+
 export async function sendChat(
   settings: Settings,
   message: string,
   history: ChatMessage[],
-  pack: Persona
+  pack: Persona,
+  options?: RequestOptions
 ): Promise<ChatResponse> {
   const apiBase = getApiBase();
   const response = await fetch(`${apiBase}/api/chat`, {
@@ -23,15 +55,15 @@ export async function sendChat(
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      message,
-      history: history.map((m) => ({ role: m.role, content: m.content })),
-      pack,
-      provider: settings.provider,
-      model: settings.model,
-      base_url: settings.baseUrl || null,
-      api_key: settings.apiKey || null,
-    } as ChatRequest),
+    body: JSON.stringify(
+      buildChatRequest(
+        settings,
+        message,
+        history.map((m) => ({ role: m.role, content: m.content })),
+        pack,
+        options
+      )
+    ),
   });
 
   if (!response.ok) {
@@ -39,6 +71,7 @@ export async function sendChat(
     throw new Error(error.detail || `HTTP ${response.status}`);
   }
 
+  options?.onReady?.();
   return response.json();
 }
 
@@ -46,7 +79,8 @@ export async function* streamChat(
   settings: Settings,
   message: string,
   history: ChatMessage[],
-  pack: Persona
+  pack: Persona,
+  options?: RequestOptions
 ): AsyncGenerator<string> {
   const apiBase = getApiBase();
   const response = await fetch(`${apiBase}/api/stream`, {
@@ -54,15 +88,15 @@ export async function* streamChat(
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      message,
-      history: history.map((m) => ({ role: m.role, content: m.content })),
-      pack,
-      provider: settings.provider,
-      model: settings.model,
-      base_url: settings.baseUrl || null,
-      api_key: settings.apiKey || null,
-    } as ChatRequest),
+    body: JSON.stringify(
+      buildChatRequest(
+        settings,
+        message,
+        history.map((m) => ({ role: m.role, content: m.content })),
+        pack,
+        options
+      )
+    ),
   });
 
   if (!response.ok) {
@@ -70,6 +104,7 @@ export async function* streamChat(
     throw new Error(error.detail || `HTTP ${response.status}`);
   }
 
+  options?.onReady?.();
   const reader = response.body?.getReader();
   if (!reader) {
     throw new Error('Response body is not readable');
@@ -110,7 +145,8 @@ export async function* streamDuelChat(
   settings: Settings,
   message: string,
   pack: Persona,
-  history: { role: string; content: string }[] = []
+  history: { role: string; content: string }[] = [],
+  options?: RequestOptions
 ): AsyncGenerator<string> {
   const apiBase = getApiBase();
   const response = await fetch(`${apiBase}/api/stream`, {
@@ -118,15 +154,7 @@ export async function* streamDuelChat(
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      message,
-      history,
-      pack,
-      provider: settings.provider,
-      model: settings.model,
-      base_url: settings.baseUrl || null,
-      api_key: settings.apiKey || null,
-    } as ChatRequest),
+    body: JSON.stringify(buildChatRequest(settings, message, history, pack, options)),
   });
 
   if (!response.ok) {
@@ -134,6 +162,7 @@ export async function* streamDuelChat(
     throw new Error(error.detail || `HTTP ${response.status}`);
   }
 
+  options?.onReady?.();
   const reader = response.body?.getReader();
   if (!reader) {
     throw new Error('Response body is not readable');

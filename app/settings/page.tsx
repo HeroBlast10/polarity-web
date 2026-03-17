@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useSettings } from '@/lib/store';
 import { getApiBase } from '@/lib/api';
+import { clearLiveDemoSession } from '@/lib/demo';
 import { PROVIDER_MODELS } from '@/lib/types';
 import { ArrowLeft, Check, AlertCircle } from 'lucide-react';
 
@@ -18,14 +19,31 @@ export default function SettingsPage() {
   const [localSettings, setLocalSettings] = useState(settings);
   const [saved, setSaved] = useState(false);
   const [testStatus, setTestStatus] = useState<'idle' | 'testing' | 'success' | 'error'>('idle');
+  const [shouldRedirectToChat, setShouldRedirectToChat] = useState(false);
 
   useEffect(() => {
     setLocalSettings(settings);
   }, [settings]);
 
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    setShouldRedirectToChat(params.get('redirect') === 'chat');
+  }, []);
+
   const handleSave = () => {
     updateSettings(localSettings);
+    clearLiveDemoSession();
     setSaved(true);
+
+    if (shouldRedirectToChat) {
+      setTimeout(() => router.push('/chat'), 250);
+      return;
+    }
+
     setTimeout(() => setSaved(false), 2000);
   };
 
@@ -197,7 +215,7 @@ export default function SettingsPage() {
           <div className="rounded-lg bg-neutral-900/50 p-5 text-sm text-neutral-500 space-y-2">
             <p className="font-medium text-neutral-400">Note:</p>
             <ul className="list-disc list-inside space-y-1">
-              <li><span className="text-neutral-300">OpenAI</span> (provider): Any OpenAI-compatible API — e.g. OpenAI, DeepSeek, Kimi, etc. Fill in that service&apos;s Base URL and API Key.</li>
+              <li><span className="text-neutral-300">OpenAI</span> (provider): Any OpenAI-compatible API - e.g. OpenAI, DeepSeek, Kimi, etc. Fill in that service&apos;s Base URL and API Key.</li>
               <li><span className="text-neutral-300">Ollama</span>: Run locally with <code className="text-neutral-300 font-mono">ollama serve</code>, Base URL usually <code className="text-neutral-300 font-mono">http://localhost:11434</code></li>
               <li><span className="text-neutral-300">LiteLLM</span>: Use any LLM that supports OpenAI-compatible API</li>
               <li>Test Connection checks if the <span className="text-neutral-300">Polarity backend</span> is reachable (default <code className="text-neutral-300 font-mono">http://localhost:8000</code>). Start it with <code className="text-neutral-300 font-mono">polarity serve</code> or <code className="text-neutral-300 font-mono">uvicorn polarity_agent.api:app --port 8000</code>.</li>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { MessageList } from '@/components/chat/message-list';
 import { ChatInput } from '@/components/chat/chat-input';
@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useSettings, useChat } from '@/lib/store';
 import { streamChat } from '@/lib/api';
+import { getLiveDemoSession, incrementLiveDemoUsage, type LiveDemoSession } from '@/lib/demo';
 import { Persona, ChatMessage } from '@/lib/types';
 import { Trash2, Loader2, ArrowLeft } from 'lucide-react';
 
@@ -15,8 +16,21 @@ export default function ChatPage() {
   const router = useRouter();
   const { settings } = useSettings();
   const { messages, currentPersona, isLoading, setPersona, addMessage, updateLastMessage, clearMessages, setLoading } = useChat();
+  const [demoSession, setDemoSession] = useState<LiveDemoSession>(() => getLiveDemoSession());
+
+  useEffect(() => {
+    setDemoSession(getLiveDemoSession());
+  }, []);
+
+  const isLiveDemo = demoSession.active;
+  const remainingDemoMessages = Math.max(0, demoSession.limit - demoSession.messagesUsed);
+  const hasReachedLiveDemoLimit = isLiveDemo && remainingDemoMessages === 0;
 
   const handleSend = useCallback(async (message: string) => {
+    if (hasReachedLiveDemoLimit) {
+      return;
+    }
+
     const userMsg: ChatMessage = {
       id: Date.now().toString(),
       role: 'user',
@@ -37,7 +51,15 @@ export default function ChatPage() {
 
     try {
       let content = '';
-      for await (const chunk of streamChat(settings, message, messages, currentPersona)) {
+      for await (const chunk of streamChat(settings, message, messages, currentPersona, {
+        useBackendDefaults: isLiveDemo,
+        onReady: () => {
+          if (!isLiveDemo) {
+            return;
+          }
+          setDemoSession(incrementLiveDemoUsage());
+        },
+      })) {
         content += chunk;
         updateLastMessage(content);
       }
@@ -47,7 +69,7 @@ export default function ChatPage() {
     } finally {
       setLoading(false);
     }
-  }, [settings, messages, currentPersona, addMessage, updateLastMessage, setLoading]);
+  }, [addMessage, currentPersona, hasReachedLiveDemoLimit, isLiveDemo, messages, setLoading, settings, updateLastMessage]);
 
   const handlePersonaChange = (value: string) => {
     setPersona(value as Persona);
@@ -90,6 +112,29 @@ export default function ChatPage() {
         </Button>
       </div>
 
+      {isLiveDemo && (
+        <div className="border-b border-neutral-800/50 bg-neutral-950/70">
+          <div className="mx-auto flex max-w-3xl items-center justify-between gap-4 px-4 py-3 md:px-6">
+            <div>
+              <p className="text-sm font-medium text-white">Live Demo</p>
+              <p className="text-sm text-neutral-400">
+                {hasReachedLiveDemoLimit
+                  ? '5-message trial limit reached. Configure your API to keep chatting.'
+                  : `Using the built-in API configuration. ${remainingDemoMessages}/${demoSession.limit} messages remaining.`}
+              </p>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => router.push('/settings?redirect=chat')}
+              className="border-neutral-800 text-neutral-300 hover:bg-neutral-900 hover:text-white rounded-full px-4"
+            >
+              Configure API
+            </Button>
+          </div>
+        </div>
+      )}
+
       <MessageList messages={messages} />
 
       <div className="border-t border-neutral-800/50 bg-card/50 backdrop-blur-sm p-4 md:p-6">
@@ -104,8 +149,15 @@ export default function ChatPage() {
           )}
           <ChatInput
             onSend={handleSend}
-            disabled={isLoading}
-            placeholder={currentPersona === 'advocatus' ? 'Tell Advocatus why you\'re right...' : 'Present your argument to Inquisitor...'}
+            disabled={hasReachedLiveDemoLimit}
+            loading={isLoading}
+            placeholder={
+              hasReachedLiveDemoLimit
+                ? 'Live Demo limit reached. Configure your API to continue.'
+                : currentPersona === 'advocatus'
+                  ? 'Tell Advocatus why you\'re right...'
+                  : 'Present your argument to Inquisitor...'
+            }
           />
         </div>
       </div>

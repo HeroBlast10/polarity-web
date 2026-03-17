@@ -49,10 +49,10 @@ export interface ChatRequest {
   message: string;
   history: { role: string; content: string }[];
   pack: Persona;
-  provider: string;
-  model: string;
-  base_url: string | null;
-  api_key: string | null;
+  provider?: string;
+  model?: string;
+  base_url?: string | null;
+  api_key?: string | null;
 }
 
 export interface ChatResponse {

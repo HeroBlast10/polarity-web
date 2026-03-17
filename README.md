@@ -1,18 +1,35 @@
 # Polarity.ai Web
 
+[中文说明](./README.zh-CN.md)
+
+Try it now: [https://polarity-web-two.vercel.app](https://polarity-web-two.vercel.app)
+
+Click `Live Demo` on the homepage to jump into Single Chat immediately.
+
 <p align="center">
-  <img src="public/logo.png" alt="Polarity Logo" width="160" />
+  <img src="public/logo.png" alt="Polarity Logo" width="180" />
 </p>
 
-The AI that refuses to be neutral. It either defends your worst ideas or attacks your objective truths.
+Polarity is the AI that refuses to be neutral. It either defends your worst ideas or attacks your most confident conclusions.
 
-A Next.js web application featuring:
+This repository contains the Next.js frontend for Polarity.ai.
 
-- **Single Chat** — Chat with Advocatus (the supporter) or Inquisitor (the challenger)
-- **Duel Mode** — Watch two AI personas battle it out in three unique formats:
-  - **Court Mode**: Classic lawyer vs. prosecutor showdown
-  - **Troll Fight**: Two AI trolls in endless mutual destruction
-  - **Praise Battle**: Two yes-men competing to out-flatter each other
+## Highlights
+
+- **Live Demo**: one-click trial from the homepage.
+- **Single Chat**: talk to Advocatus (supporter) or Inquisitor (challenger).
+- **Duel Mode**: watch two personas clash in multiple formats.
+- **Bring Your Own Key**: plug in your own provider, model, and backend settings.
+
+## Model Recommendation
+
+Polarity works best with **uncensored models** or **local models**.
+
+- Local Ollama models usually produce the sharpest, least filtered debates.
+- Uncensored or lightly aligned models are better at staying in character.
+- Heavily safety-tuned hosted models still work, but the outputs are often less aggressive, less funny, and less committed to the role.
+
+If you want the full Polarity experience, start with a local or minimally filtered model.
 
 ## Backend
 
@@ -21,7 +38,6 @@ This frontend works with the [Polarity Agent](https://github.com/HeroBlast10/pol
 ### Quick Start (Backend)
 
 ```bash
-# Clone and install
 git clone https://github.com/HeroBlast10/polarity-agent.git
 cd polarity-agent
 
@@ -34,36 +50,50 @@ polarity serve
 
 ### Backend Features
 
-- **Provider Support**: OpenAI, LiteLLM, Ollama
-- **CLI & Web UI**: Streamlit interface or command-line
-- **Duel Mode**: Multiple debate formats
-- **Trace Logging**: Session replay and debugging
+- OpenAI-compatible providers
+- LiteLLM support
+- Ollama local inference
+- Streaming chat and duel responses
+- CLI and web tooling
 
-## Getting Started
+## Frontend Setup
 
 ### Prerequisites
 
 - Node.js 18+
-- API key (OpenAI, LiteLLM, or local Ollama)
+- A running Polarity backend
+- An API key for your provider, or a local model via Ollama
 
 ### Installation
 
 ```bash
-# Install dependencies
 npm install
-
-# Run development server
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+Then:
+
+1. Open `Settings`
+2. Configure your provider, model, API key, and backend URL
+3. Save settings
+4. Start chatting
+
+## Live Demo
+
+Online app: [https://polarity-web-two.vercel.app](https://polarity-web-two.vercel.app)
+
+- The homepage includes a `Live Demo` entry for quick testing.
+- Demo mode is intended for immediate trial use.
+- For the best experience, configure your own local or uncensored model in `Settings`.
 
 ## Tech Stack
 
-- Next.js 14
-- React 18
-- Tailwind CSS
+- Next.js 16
+- React 19
 - TypeScript
+- Tailwind CSS
 
 ## License
 
