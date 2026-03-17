@@ -19,14 +19,14 @@ export default function Home() {
   };
 
   return (
-    <div className="container mx-auto flex min-h-[calc(100vh-57px)] flex-col items-center justify-center px-4 py-6 md:py-8">
-      <div className="mb-7 text-center md:mb-8">
+    <div className="container mx-auto flex min-h-[calc(100vh-57px)] flex-col items-center justify-center px-4 py-4 md:py-6">
+      <div className="mb-5 text-center md:mb-6">
         <Image
           src="/logo.png"
           alt="Polarity"
-          width={176}
-          height={176}
-          className="mx-auto mb-4 h-32 w-32 object-contain md:mb-5 md:h-40 md:w-40"
+          width={208}
+          height={208}
+          className="mx-auto mb-2 h-44 w-44 object-contain md:mb-3 md:h-52 md:w-52"
           priority
         />
         <p className="text-sm font-medium text-neutral-500 tracking-[0.2em] uppercase mb-4">
@@ -43,12 +43,12 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="mb-5 flex flex-col items-center gap-2 text-center md:mb-6">
+      <div className="mb-5 flex flex-wrap items-center justify-center gap-3 text-center md:mb-6">
         <Link
           href={GITHUB_URL}
           target="_blank"
           rel="noreferrer"
-          className="mb-1 inline-flex items-center gap-2 rounded-full border border-neutral-800 px-4 py-2 text-sm text-neutral-400 transition-colors hover:border-neutral-700 hover:text-white"
+          className="inline-flex items-center gap-2 rounded-full border border-neutral-800 px-4 py-2 text-sm text-neutral-400 transition-colors hover:border-neutral-700 hover:text-white"
         >
           <Star className="h-4 w-4" />
           Give us a star on GitHub
@@ -61,9 +61,6 @@ export default function Home() {
           Live Demo
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
-        <p className="max-w-md text-sm leading-relaxed text-neutral-500">
-          Jump straight into Single Chat with the built-in API configuration. Trial is limited to 5 messages.
-        </p>
       </div>
 
       <div className="mb-6 flex items-center gap-4 text-sm text-neutral-500 md:mb-8">
