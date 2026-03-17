@@ -78,11 +78,13 @@ export default function ChatPage() {
 
   return (
     <div className="flex h-[calc(100vh-64px)] flex-col">
-      <div className="flex items-center justify-between border-b border-neutral-800/50 bg-card/50 px-6 py-4">
-        <div className="flex items-center gap-4">
+      <div className="grid grid-cols-[1fr_auto_1fr] items-center border-b border-neutral-800/50 bg-card/50 px-6 py-4">
+        <div className="justify-self-start">
           <Button variant="ghost" size="icon" onClick={() => router.push('/')} className="text-neutral-400 hover:text-white rounded-full">
             <ArrowLeft className="h-4 w-4" />
           </Button>
+        </div>
+        <div className="justify-self-center">
           <Tabs value={currentPersona} onValueChange={handlePersonaChange}>
             <TabsList className="bg-neutral-900/50 h-10">
               <TabsTrigger 
@@ -100,6 +102,7 @@ export default function ChatPage() {
             </TabsList>
           </Tabs>
         </div>
+        <div className="justify-self-end">
         <Button 
           variant="ghost" 
           size="sm" 
@@ -110,6 +113,7 @@ export default function ChatPage() {
           <Trash2 className="mr-2 h-4 w-4" />
           Clear
         </Button>
+        </div>
       </div>
 
       {isLiveDemo && (

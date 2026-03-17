@@ -128,13 +128,18 @@ export default function DuelPage() {
 
   return (
     <div className="flex h-[calc(100vh-57px)] flex-col">
-      <div className="flex items-center gap-3 border-b border-neutral-800 bg-card px-4 py-3">
+      <div className="grid grid-cols-[1fr_auto_1fr] items-center border-b border-neutral-800 bg-card px-4 py-3">
+        <div className="justify-self-start">
         <Button variant="ghost" size="icon" onClick={() => router.push('/')} className="text-neutral-400 hover:text-white">
           <ArrowLeft className="h-4 w-4" />
         </Button>
-        <ModeIcon className={`h-5 w-5 text-cyan-500`} />
-        <span className="font-medium text-white">{modeInfo[duelState.mode].title}</span>
-        {started && <span className="text-sm text-neutral-500">Round {duelState.round}/{duelState.rounds}</span>}
+        </div>
+        <div className="flex items-center justify-center gap-3 justify-self-center text-center">
+          <ModeIcon className={`h-5 w-5 text-cyan-500`} />
+          <span className="font-medium text-white">{modeInfo[duelState.mode].title}</span>
+          {started && <span className="text-sm text-neutral-500">Round {duelState.round}/{duelState.rounds}</span>}
+        </div>
+        <div />
       </div>
 
       {!started ? (
