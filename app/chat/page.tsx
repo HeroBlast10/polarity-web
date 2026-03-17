@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useSettings, useChat } from '@/lib/store';
 import { streamChat } from '@/lib/api';
-import { getLiveDemoSession, incrementLiveDemoUsage, type LiveDemoSession } from '@/lib/demo';
+import { getLiveDemoSession, incrementLiveDemoUsage, LIVE_DEMO_SETTINGS, type LiveDemoSession } from '@/lib/demo';
 import { Persona, ChatMessage } from '@/lib/types';
 import { Trash2, Loader2, ArrowLeft } from 'lucide-react';
 
@@ -49,15 +49,18 @@ export default function ChatPage() {
     };
     addMessage(assistantMsg);
 
+    // Live Demo 直接使用内置 DeepSeek 配置，不依赖后端环境变量
+    const activeSettings = isLiveDemo
+      ? { ...settings, ...LIVE_DEMO_SETTINGS }
+      : settings;
+
     try {
       let content = '';
-      for await (const chunk of streamChat(settings, message, messages, currentPersona, {
-        useBackendDefaults: isLiveDemo,
+      for await (const chunk of streamChat(activeSettings, message, messages, currentPersona, {
         onReady: () => {
-          if (!isLiveDemo) {
-            return;
+          if (isLiveDemo) {
+            setDemoSession(incrementLiveDemoUsage());
           }
-          setDemoSession(incrementLiveDemoUsage());
         },
       })) {
         content += chunk;
