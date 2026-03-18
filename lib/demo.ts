@@ -2,13 +2,7 @@ export const LIVE_DEMO_LIMIT = 5;
 
 const LIVE_DEMO_KEY = 'polarity_live_demo';
 
-// 完整的 Live Demo 配置，直接发送给后端，不依赖服务器环境变量
-export const LIVE_DEMO_SETTINGS = {
-  provider: 'openai' as const,
-  model: 'deepseek-chat',
-  apiKey: 'sk-d4206e1d1a9b4ce09669afbe99f0ec3b',
-  baseUrl: 'https://api.deepseek.com',
-};
+// Live Demo 请求走后端专用 /api/demo 端点，API Key 由服务端注入，不在前端出现
 
 export interface LiveDemoSession {
   active: boolean;

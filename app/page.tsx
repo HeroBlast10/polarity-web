@@ -19,10 +19,10 @@ export default function Home() {
   };
 
   return (
-    <div className="relative flex min-h-[calc(100vh-57px)] flex-col items-center px-4 pb-16 pt-10 md:pt-14">
+    <div className="relative flex min-h-[calc(100vh-57px)] flex-col items-center px-4 pb-16 pt-6 md:pt-8">
 
-      {/* ── 主体内容，垂直居中 ── */}
-      <div className="flex w-full flex-1 flex-col items-center justify-center">
+      {/* ── 主体内容 ── */}
+      <div className="flex w-full flex-col items-center justify-start">
 
         {/* Logo + 标题区块 */}
         <div className="mb-6 text-center">
