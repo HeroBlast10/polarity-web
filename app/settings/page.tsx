@@ -167,7 +167,7 @@ export default function SettingsPage() {
               id="backendUrl"
               type="text"
               placeholder="http://localhost:8000"
-              defaultValue={typeof window !== 'undefined' ? localStorage.getItem('polarity_api_base') || 'https://polarity-web-two.vercel.app' : 'https://polarity-web-two.vercel.app'}
+              defaultValue={typeof window !== 'undefined' ? localStorage.getItem('polarity_api_base') || 'https://www.polarityai.xyz' : 'https://www.polarityai.xyz'}
               onBlur={(e) => {
                 localStorage.setItem('polarity_api_base', e.target.value);
               }}

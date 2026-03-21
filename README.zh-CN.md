@@ -2,7 +2,7 @@
 
 [English README](./README.md)
 
-立即体验: [https://polarity-web-two.vercel.app](https://polarity-web-two.vercel.app)
+立即体验: [https://www.polarityai.xyz](https://www.polarityai.xyz)
 
 进入首页后，点击 `Live Demo` 即可直接进入 Single Chat 试用。
 
@@ -82,7 +82,7 @@ npm run dev
 
 ## 在线体验
 
-在线地址: [https://polarity-web-two.vercel.app](https://polarity-web-two.vercel.app)
+在线地址: [https://www.polarityai.xyz](https://www.polarityai.xyz)
 
 - 首页提供 `Live Demo` 入口，适合快速试用。
 - Demo 模式适合立即体验产品。

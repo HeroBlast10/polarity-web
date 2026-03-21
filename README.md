@@ -2,7 +2,7 @@
 
 [中文说明](./README.zh-CN.md)
 
-Try it now: [https://polarity-web-two.vercel.app](https://polarity-web-two.vercel.app)
+Try it now: [https://www.polarityai.xyz](https://www.polarityai.xyz)
 
 Click `Live Demo` on the homepage to jump into Single Chat immediately.
 
@@ -82,7 +82,7 @@ Then:
 
 ## Live Demo
 
-Online app: [https://polarity-web-two.vercel.app](https://polarity-web-two.vercel.app)
+Online app: [https://www.polarityai.xyz](https://www.polarityai.xyz)
 
 - The homepage includes a `Live Demo` entry for quick testing.
 - Demo mode is intended for immediate trial use.

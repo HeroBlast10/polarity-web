@@ -7,9 +7,10 @@ import { ChatMessage } from '@/lib/types';
 
 interface MessageListProps {
   messages: ChatMessage[];
+  isLoading?: boolean;
 }
 
-export function MessageList({ messages }: MessageListProps) {
+export function MessageList({ messages, isLoading = false }: MessageListProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -26,14 +27,20 @@ export function MessageList({ messages }: MessageListProps) {
             <p className="text-sm font-mono">Start a conversation...</p>
           </div>
         )}
-        {messages.map((msg) => (
-          <MessageItem
-            key={msg.id}
-            role={msg.role}
-            content={msg.content}
-            persona={msg.persona}
-          />
-        ))}
+        {messages.map((msg, index) => {
+          const isLastMessage = index === messages.length - 1;
+          const isStreamingMessage = isLastMessage && msg.role === 'assistant' && isLoading;
+          
+          return (
+            <MessageItem
+              key={msg.id}
+              role={msg.role}
+              content={msg.content}
+              persona={msg.persona}
+              isStreaming={isStreamingMessage}
+            />
+          );
+        })}
       </div>
     </ScrollArea>
   );

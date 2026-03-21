@@ -135,7 +135,7 @@ export default function ChatPage() {
         </div>
       )}
 
-      <MessageList messages={messages} />
+      <MessageList messages={messages} isLoading={isLoading} />
 
       <div className="border-t border-neutral-800/50 bg-card/50 backdrop-blur-sm p-4 md:p-6">
         <div className="mx-auto max-w-3xl">

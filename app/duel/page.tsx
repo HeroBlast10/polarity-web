@@ -204,6 +204,7 @@ export default function DuelPage() {
             </div>
             <div ref={advocatusRef} className="flex-1 overflow-y-auto p-4 text-green-400 whitespace-pre-wrap">
               {duelState.advocatusText || 'Waiting...'}
+              {duelState.isThinking === 'advocatus' && <span className="typing-cursor" />}
             </div>
           </div>
           <div className="flex w-1/2 flex-col">
@@ -215,6 +216,7 @@ export default function DuelPage() {
             </div>
             <div ref={inquisitorRef} className="flex-1 overflow-y-auto p-4 text-red-400 whitespace-pre-wrap">
               {duelState.inquisitorText || 'Waiting...'}
+              {duelState.isThinking === 'inquisitor' && <span className="typing-cursor" />}
             </div>
           </div>
         </div>

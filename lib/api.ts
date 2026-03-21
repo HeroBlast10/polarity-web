@@ -1,6 +1,6 @@
 import { ChatRequest, ChatResponse, Settings, ChatMessage, Persona } from './types';
 
-const DEFAULT_API_BASE = 'https://polarity-web-two.vercel.app';
+const DEFAULT_API_BASE = 'https://www.polarityai.xyz';
 
 // Live Demo 专用后端端点，API Key 由服务端注入，不经过前端
 const DEMO_ENDPOINT = `${DEFAULT_API_BASE}/api/demo`;

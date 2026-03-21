@@ -60,7 +60,7 @@ _ip_log: dict[str, list[float]] = defaultdict(list)
 
 # 允许访问 /api/demo 的 Origin 白名单
 _ALLOWED_ORIGINS = {
-    "https://polarity-web-two.vercel.app",
+    "https://www.polarityai.xyz",
     "https://polarity.ai",
     # 本地开发
     "http://localhost:3000",

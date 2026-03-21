@@ -6,9 +6,10 @@ interface MessageItemProps {
   role: 'user' | 'assistant';
   content: string;
   persona?: 'advocatus' | 'inquisitor';
+  isStreaming?: boolean;
 }
 
-export function MessageItem({ role, content, persona }: MessageItemProps) {
+export function MessageItem({ role, content, persona, isStreaming = false }: MessageItemProps) {
   const isUser = role === 'user';
   const isAdvocatus = persona === 'advocatus';
   const isInquisitor = persona === 'inquisitor';
@@ -29,7 +30,8 @@ export function MessageItem({ role, content, persona }: MessageItemProps) {
           !isUser && !persona && 'bg-neutral-900/50 text-neutral-300'
         )}
       >
-        {content}
+        {content || '\u00A0'}
+        {!isUser && isStreaming && <span className="typing-cursor" />}
       </div>
     </div>
   );
